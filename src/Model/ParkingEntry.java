@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Class represents entry to the parking limited by 3 stripes
  */
-public class ParkingEntry
+public class ParkingEntry // or static ??
 {
     // можно сделать через Semaphore ??
     private List<Car> entryCars;

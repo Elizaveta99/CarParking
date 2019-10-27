@@ -6,6 +6,7 @@ import java.util.List;
 public class CarParking
 {
     private int carPlacesAmount;
+    private ParkingEntry entry;
     private List<CarPlace> carPlaces;
     //ClientQueue clientQueue;
 
@@ -13,13 +14,14 @@ public class CarParking
      * Constructor to create car parking
      * @param carPlacesAmount the number of operators in call centre
      */
-    public CarParking(int carPlacesAmount)
+    public CarParking(int carPlacesAmount, ParkingEntry entry)
     {
         this.carPlacesAmount = carPlacesAmount;
+        this.entry = entry;
         this.carPlaces = new ArrayList<>();
         //this.clientQueue = new ClientQueue();
-        for (int i = 0; i < carPlacesAmount; ++i)
-            carPlaces.add(new CarPlace(i));
+        for (int i = 0; i < carPlacesAmount; i++)
+            carPlaces.add(new CarPlace(i, entry));
     }
 
     /**
@@ -27,8 +29,14 @@ public class CarParking
      */
      public void open()
      {
-        for (Thread place: carPlaces)
+        for (CarPlace place: carPlaces)
             place.start();
+     }
+
+     public void close()
+     {
+         for (CarPlace place: carPlaces)
+             place.stopWork();
      }
 
         /**

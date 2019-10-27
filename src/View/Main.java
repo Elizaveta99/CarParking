@@ -3,6 +3,7 @@ package View;
 import Model.CarParking;
 import Model.CarsGenerator;
 import Model.ParkingEntry;
+import Model.WorkInfo;
 
 import java.util.Scanner;
 
@@ -19,12 +20,14 @@ public class Main
         Scanner sc = new Scanner(System.in);
         //System.out.println("Amount of car places : ");
         //int carPlaces = Integer.parseInt(sc.nextLine());
-        CarParking carParking = new CarParking(carPlaces);
-        System.out.println("Parking opened.\n\tNew car arrived: 1 <Car name>"
+        CarParking carParking = new CarParking(carPlaces, entry);
+        System.out.println("Parking opened.\n\tNew car arrived from entry: 1 <Car name>"
                 + "\n\tCar left parking: 2 <Car name>"
                 + "\n\tParking closed: 3");
         carParking.open();
-        while (sc.hasNextLine())
+        //carParking.close(); // ??
+
+        /*while (sc.hasNextLine())
         {
             String input = sc.nextLine();
             String[] type = input.split("\\s");
@@ -32,7 +35,7 @@ public class Main
                 switch (Integer.parseInt(type[0]))
                 {
                     case 1:
-                        if (carParking.call(params[1], Integer.parseInt(params[2])))
+                        if (carParking.takePlace(entry.get().getName()))
                             Informator.inform(params[1] + " awaits its turn");
                         else
                             Informator.inform(params[1] + " is already waiting for his turn");
@@ -44,23 +47,15 @@ public class Main
                             Informator.inform(params[1] + " does not wait for operator");
                         break;
                     case 3:
-                        if (!carParking.stopWork()) {
-                            Informator.inform("Stop: But some clients are still waiting for his responses("
-                                    + "\n(press 1 to close anyway)");
-                            if (sc.nextLine().equals("1")) {
-                                callcenter.stopWorkAnyway();
-                                return;
-                            }
-                        } else
-                            return;
+                        carParking.close();
                         break;
                     default:
-                        throw new Exception("Incorrect parameters entered");
+                        throw new Exception("Incorrect input");
 
                 }
             } catch (Exception e) {
-                Informator.inform("Incorrect params");
+                WorkInfo.setInfo("Incorrect params");
             }
-        }
+        }*/
     }
 }
