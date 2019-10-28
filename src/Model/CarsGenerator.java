@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.List;
+
 /**
  * Class that generates input cars
  */
@@ -14,6 +16,11 @@ public class CarsGenerator extends Thread
         this.carsAmount = carsAmount;
     }
 
+    public ParkingEntry getEntry()
+    {
+        return this.entry;
+    }
+
     @Override
     public void run()
     {
@@ -22,7 +29,7 @@ public class CarsGenerator extends Thread
         {
             Thread.currentThread().setName(" Generator cars");
             count++;
-            entry.add(new Car("Car" + count));
+            entry.add(new Car("Car_" + count));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

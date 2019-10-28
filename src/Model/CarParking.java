@@ -2,13 +2,16 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Exchanger;
 
 public class CarParking
 {
     private int carPlacesAmount;
     private ParkingEntry entry;
     private List<CarPlace> carPlaces;
-    //ClientQueue clientQueue;
+    private static Exchanger exchanger;
+    private static Car exchCar;
+    private static int exchPlace;
 
     /**
      * Constructor to create car parking
@@ -19,18 +22,28 @@ public class CarParking
         this.carPlacesAmount = carPlacesAmount;
         this.entry = entry;
         this.carPlaces = new ArrayList<>();
-        //this.clientQueue = new ClientQueue();
-        for (int i = 0; i < carPlacesAmount; i++)
-            carPlaces.add(new CarPlace(i, entry));
+    }
+
+    public static synchronized int getExchPlace() {
+        return exchPlace;
+    }
+
+    public static synchronized void setExchPlace(int _exchPlace) {
+        exchPlace = _exchPlace;
     }
 
     /**
-     * Car parking openes
+     * Car parking opens
      */
      public void open()
      {
-        for (CarPlace place: carPlaces)
-            place.start();
+         exchanger = new Exchanger();
+         for (int i = 0; i < this.carPlacesAmount; i++)
+         {
+             CarPlace place = new CarPlace(i + 1, entry, exchanger);
+             carPlaces.add(place);
+             place.start();
+         }
      }
 
      public void close()
@@ -39,44 +52,11 @@ public class CarParking
              place.stopWork();
      }
 
-        /**
-         * Try to stop work of call centre
-         * @return true if no one client wait for operator
-         */
-        /*public synchronized boolean stopWork(){
-        if (!clientQueue.isEmpty())
-            return false;
-        stopWorkAnyway();
-        return true;
-    }*/
+    public static synchronized Car getExchCar() {
+        return exchCar;
+    }
 
-        /**
-         * Force stop of call centre
-         */
-        /*public synchronized void stopWorkAnyway(){
-        for (Operator operator: operators)
-            operator.stopWork();
-        clientQueue.closeQueue();
-    }*/
-
-        /**
-         * Car takes place
-         * @param car
-         * @return false
-         */
-        public synchronized boolean takePlace(Car car) // ???
-        {
-            //return clientQueue.call(new Client(name, complexity));
-            return true; //??
-        }
-
-        /**
-         * Leave queue of call centre
-         * @param name of client
-         * @return false f client not in queue
-         */
-        /*public synchronized boolean stopWaiting(String name)
-        {
-            return clientQueue.leaveQueue(name);
-        }*/
+    public static synchronized void setExchCar(Car _exchCar) {
+        exchCar = _exchCar;
+    }
 }

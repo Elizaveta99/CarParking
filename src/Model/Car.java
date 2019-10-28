@@ -16,7 +16,7 @@ public class Car
         this.name = name;
     }
 
-    public String getName() {
+    public synchronized String getName() {
         return name;
     }
 

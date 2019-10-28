@@ -6,13 +6,18 @@ import java.util.List;
 /**
  * Class represents entry to the parking limited by 3 stripes
  */
-public class ParkingEntry // or static ??
+public class ParkingEntry
 {
-    // можно сделать через Semaphore ??
+    // Semaphore
     private List<Car> entryCars;
     private static final int maxCarEntry = 3;
     private static final int minCarEntry = 0;
     private int carsCounter = 0;
+
+    public List<Car> getEntryCars()
+    {
+        return entryCars;
+    }
 
     public ParkingEntry() {
         entryCars = new ArrayList<>();
@@ -20,7 +25,6 @@ public class ParkingEntry // or static ??
 
     public synchronized boolean add(Car element)
     {
-
         try {
             if (carsCounter < maxCarEntry)
             {
@@ -31,7 +35,7 @@ public class ParkingEntry // or static ??
 
             }
             else {
-                WorkInfo.setInfo("Car " + element.getName() + "can't enter the parking");
+                WorkInfo.setInfo("Car " + element.getName() + " can't enter the parking");
                 wait();
                 return false;
             }
@@ -57,7 +61,7 @@ public class ParkingEntry // or static ??
                 }
             }
 
-            WorkInfo.setInfo("There are no cars in the entrance");
+            //WorkInfo.setInfo("There are no cars in the entrance");
             wait();
 
         } catch (InterruptedException e) {

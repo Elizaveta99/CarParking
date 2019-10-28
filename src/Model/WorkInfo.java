@@ -12,7 +12,6 @@ public class WorkInfo
      */
     public static synchronized void setInfo(String info){
         System.out.println(info);
-        // currentThread тоже передавать? выводить
-        System.out.flush(); // ??
+        System.out.flush();
     }
 }
