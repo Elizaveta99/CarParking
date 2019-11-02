@@ -4,8 +4,14 @@ import java.util.concurrent.Exchanger;
 
 import static java.lang.StrictMath.abs;
 
+/**
+ * Class for Car place, each car place is thread
+ */
 public class CarPlace extends Thread
 {
+    /**
+     * Fileds - car, cars from entry, place number, flag for thread to work, object to exchange
+     */
     private Car car;
     private ParkingEntry entry;
     private int placeNumber;
@@ -27,6 +33,7 @@ public class CarPlace extends Thread
 
     /**
      * Method represents that car takes this place
+     * Cars on the near places can exchange by places
      */
     @Override
     public void run()
@@ -47,45 +54,44 @@ public class CarPlace extends Thread
                         try {
                             WorkInfo.setInfo("I'm ready to change! PlaceNumber " + this.placeNumber + " Car" + tempcar.getName());
                             Car exchCar = (Car) exchanger.exchange(CarParking.getExchCar());
+                            setCar(exchCar);
                         } catch (InterruptedException e)
                         {
-                            e.printStackTrace();
+                            WorkInfo.setError(e.getMessage());
+                            //e.printStackTrace();
                         }
                     }
                     else {
                         int settedExchPlace = CarParking.getExchPlace();
                         if (abs(this.placeNumber - settedExchPlace) == 1)
                         {
-                            WorkInfo.setInfo("exchange " + this.placeNumber + " settedPlace " + settedExchPlace);
+                            WorkInfo.setInfo("Want to exchange place " + this.placeNumber + " and settedPlace " + settedExchPlace);
                             try {
-                                Car exchCar = (Car)exchanger.exchange(CarParking.getExchCar());
-                                WorkInfo.setInfo("Car " + this.car.getName() + " on place # " + this.placeNumber + " exchanged places with Car " + exchCar.getName() + " on place # " + settedExchPlace);
-
+                                WorkInfo.setInfo("Car " + this.car.getName() + " on place # " + this.placeNumber + " exchanged places with Car on place # " + settedExchPlace);
+                                Car exchCar = (Car)exchanger.exchange(tempcar);
                                 setCar(exchCar);
-                                //CarParking.setExchPlace(this.placeNumber);
-                                CarParking.setExchCar(exchCar);
-                                flag = true;
                             } catch (InterruptedException e)
                             {
-                                e.printStackTrace();
+                                WorkInfo.setError(e.getMessage());
+                                //e.printStackTrace();
                             }
                         }
                     }
-
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        WorkInfo.setError(e.getMessage());
+                        //e.printStackTrace();
                     }
-                    if (!flag)
-                        WorkInfo.setInfo("Car " + forLeft.getName() + " left place # " + this.placeNumber);
-                    else
-                        WorkInfo.setInfo("Car " + this.car.getName() + " left place # " + this.placeNumber);
+                    WorkInfo.setInfo("Car " + this.car.getName() + " left place # " + this.placeNumber);
                 }
         }
         WorkInfo.setInfo("CarPlace " + this.placeNumber + " stopped working");
     }
 
+    /**
+     * @param car - current car on this place
+     */
     public synchronized void setCar(Car car)
     {
         this.car = car;

@@ -6,6 +6,9 @@ import java.util.concurrent.Exchanger;
 
 public class CarParking
 {
+    /**
+     * Fields - amount of car places, entry cars, list of cars, exchanger to change cars, car to change, place to change
+     */
     private int carPlacesAmount;
     private ParkingEntry entry;
     private List<CarPlace> carPlaces;
@@ -16,6 +19,7 @@ public class CarParking
     /**
      * Constructor to create car parking
      * @param carPlacesAmount the number of operators in call centre
+     * @param entry - cars from entrance
      */
     public CarParking(int carPlacesAmount, ParkingEntry entry)
     {
@@ -46,6 +50,9 @@ public class CarParking
          }
      }
 
+    /**
+     * Car parking closes
+     */
      public void close()
      {
          for (CarPlace place: carPlaces)

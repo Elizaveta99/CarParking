@@ -10,13 +10,20 @@ public class CarsGenerator extends Thread
     private ParkingEntry entry;
     private int carsAmount;
 
+    /**
+     * @param entry - where cars arrive
+     * @param carsAmount - amount of cars that arrive
+     */
     public CarsGenerator(ParkingEntry entry, int carsAmount)
     {
         this.entry = entry;
         this.carsAmount = carsAmount;
     }
 
-    public ParkingEntry getEntry()
+    /**
+     * @return - cars from entrance
+     */
+    public synchronized ParkingEntry getEntry()
     {
         return this.entry;
     }
@@ -33,7 +40,8 @@ public class CarsGenerator extends Thread
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                WorkInfo.setError(e.getMessage());
+                //e.printStackTrace();
             }
         }
     }

@@ -18,7 +18,7 @@ public class Main
         CarsGenerator carsGenerator = new CarsGenerator(entry, carsAmount);
         carsGenerator.start();
 
-        CarParking carParking = new CarParking(carPlaces, entry);
+        CarParking carParking = new CarParking(carPlaces, carsGenerator.getEntry());
         carParking.open();
 
         Thread.sleep(40000);

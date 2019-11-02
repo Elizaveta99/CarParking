@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class ParkingEntry
 {
-    // Semaphore
     private List<Car> entryCars;
     private static final int maxCarEntry = 3;
     private static final int minCarEntry = 0;
@@ -19,10 +18,17 @@ public class ParkingEntry
         return entryCars;
     }
 
+    /**
+     * Constructor - list of carsin entrance
+     */
     public ParkingEntry() {
         entryCars = new ArrayList<>();
     }
 
+    /**
+     * @param element - car that arrives
+     * @return - car arrived
+     */
     public synchronized boolean add(Car element)
     {
         try {
@@ -41,11 +47,15 @@ public class ParkingEntry
             }
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            WorkInfo.setError(e.getMessage());
+            //e.printStackTrace();
         }
         return true;
     }
 
+    /**
+     * @return - car from entrance
+     */
     public synchronized Car get()
     {
         try {
@@ -60,12 +70,11 @@ public class ParkingEntry
                     return car;
                 }
             }
-
-            //WorkInfo.setInfo("There are no cars in the entrance");
             wait();
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            WorkInfo.setError(e.getMessage());
+            //e.printStackTrace();
         }
         return null;
     }
